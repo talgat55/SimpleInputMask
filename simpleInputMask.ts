@@ -1,31 +1,58 @@
 type MaskConfig = {
     mask: string;
-    placeholderChar?: string;
     onComplete?: (value: string) => void;
 };
 
 class SimpleInputMask {
     private mask: string;
-    private placeholderChar: string;
     private inputElement: HTMLInputElement | null = null;
     private onCompleteCallback?: (value: string) => void;
 
     constructor(config: MaskConfig) {
         this.mask = config.mask;
-        this.placeholderChar = config.placeholderChar || "_";
         this.onCompleteCallback = config.onComplete;
     }
 
     private applyMask(value: string): string {
-        const chars = value.replace(/\D/g, "").split("");
         let maskedValue = "";
+        let valueIndex = 0;
 
-        for (const char of this.mask) {
-            if (chars.length === 0) break;
-            if (char === this.placeholderChar) {
-                maskedValue += chars.shift();
+        for (let i = 0; i < this.mask.length; i++) {
+            const maskChar = this.mask[i];
+            const currentValueChar = value[valueIndex];
+
+            if (!currentValueChar) break;
+
+            if (maskChar === "9") {
+                if (/\d/.test(currentValueChar)) {
+                    maskedValue += currentValueChar;
+                    valueIndex++;
+                } else {
+                    // Если символ не соответствует ожидаемому, пропускаем его
+                    valueIndex++;
+                    i--; // Повторяем итерацию маски
+                }
+            } else if (maskChar === "A") {
+                if (/[a-zA-Z]/.test(currentValueChar)) {
+                    maskedValue += currentValueChar;
+                    valueIndex++;
+                } else {
+                    valueIndex++;
+                    i--;
+                }
+            } else if (maskChar === "*") {
+                if (/[a-zA-Z0-9]/.test(currentValueChar)) {
+                    maskedValue += currentValueChar;
+                    valueIndex++;
+                } else {
+                    valueIndex++;
+                    i--;
+                }
             } else {
-                maskedValue += char;
+                maskedValue += maskChar;
+                if (currentValueChar === maskChar) {
+                    valueIndex++;
+                }
             }
         }
 
@@ -33,7 +60,7 @@ class SimpleInputMask {
     }
 
     private isComplete(value: string): boolean {
-        return !value.includes(this.placeholderChar);
+        return this.applyMask(value).length === this.mask.length;
     }
 
     attach(input: HTMLInputElement) {
@@ -45,12 +72,13 @@ class SimpleInputMask {
             const maskedValue = this.applyMask(rawValue);
             this.inputElement.value = maskedValue;
 
-            if (this.isComplete(maskedValue) && this.onCompleteCallback) {
+            if (this.isComplete(rawValue) && this.onCompleteCallback) {
                 this.onCompleteCallback(maskedValue);
             }
         };
 
         this.inputElement.addEventListener("input", onInput);
+        this.inputElement.addEventListener("paste", onInput);
         (this.inputElement as any)._onInputMask = onInput;
     }
 
@@ -59,6 +87,7 @@ class SimpleInputMask {
             const onInput = (this.inputElement as any)._onInputMask;
             if (onInput) {
                 this.inputElement.removeEventListener("input", onInput);
+                this.inputElement.removeEventListener("paste", onInput);
                 delete (this.inputElement as any)._onInputMask;
             }
             this.inputElement = null;
