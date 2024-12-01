@@ -50,7 +50,6 @@ const mask = new SimpleInputMask(inputElement, options);
 | Option       | Type     | Default | Description                                      |
 |--------------|----------|---------|--------------------------------------------------|
 | `mask`       | `string` | `null`  | The mask pattern (e.g., `(###) ###-####`).       |
-| `placeholder`| `string` | `-`     | Character used as the placeholder.              |
 | `onComplete` | `function` | `null`| Callback triggered when input matches the mask. |
 
 ### Methods
