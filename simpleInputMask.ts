@@ -1,16 +1,19 @@
 type MaskConfig = {
     mask: string;
     placeholderChar?: string;
+    onComplete?: (value: string) => void;
 };
 
 class SimpleInputMask {
     private mask: string;
     private placeholderChar: string;
     private inputElement: HTMLInputElement | null = null;
+    private onCompleteCallback?: (value: string) => void;
 
     constructor(config: MaskConfig) {
         this.mask = config.mask;
         this.placeholderChar = config.placeholderChar || "_";
+        this.onCompleteCallback = config.onComplete;
     }
 
     private applyMask(value: string): string {
@@ -29,17 +32,25 @@ class SimpleInputMask {
         return maskedValue;
     }
 
+    private isComplete(value: string): boolean {
+        return !value.includes(this.placeholderChar);
+    }
+
     attach(input: HTMLInputElement) {
         this.inputElement = input;
 
         const onInput = () => {
             if (!this.inputElement) return;
             const rawValue = this.inputElement.value;
-            this.inputElement.value = this.applyMask(rawValue);
+            const maskedValue = this.applyMask(rawValue);
+            this.inputElement.value = maskedValue;
+
+            if (this.isComplete(maskedValue) && this.onCompleteCallback) {
+                this.onCompleteCallback(maskedValue);
+            }
         };
 
         this.inputElement.addEventListener("input", onInput);
-
         (this.inputElement as any)._onInputMask = onInput;
     }
 
