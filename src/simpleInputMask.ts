@@ -28,9 +28,8 @@ class SimpleInputMask {
                     maskedValue += currentValueChar;
                     valueIndex++;
                 } else {
-                    // Если символ не соответствует ожидаемому, пропускаем его
                     valueIndex++;
-                    i--; // Повторяем итерацию маски
+                    i--;
                 }
             } else if (maskChar === "A") {
                 if (/[a-zA-Z]/.test(currentValueChar)) {
@@ -94,3 +93,5 @@ class SimpleInputMask {
         }
     }
 }
+
+export default SimpleInputMask;
