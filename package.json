@@ -1,0 +1,15 @@
+{
+  "name": "simpleinput",
+  "version": "1.0.0",
+  "description": "SimpleInputMask is a lightweight, user-friendly JavaScript library for creating input masks. Designed to simplify and enhance form validation, it helps users enter formatted data, such as phone numbers, dates, credit card numbers, and more, with ease.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
