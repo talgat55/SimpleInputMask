@@ -5,16 +5,15 @@
     <title>Phone</title>
 </head>
 <body>
-<h1>
-    Phone
-</h1>
+<h1>Phone</h1>
 <input id="phone" placeholder="(###) ###-####" />
 <script src="../dist/simpleInputMask.js"></script>
 <script>
     const input = document.getElementById("phone");
-    const mask = new SimpleInputMask({ mask: "(###) ###-####" });
+    const mask = new SimpleInputMask({
+        mask: "(###) ###-####",
+    });
     mask.attach(input);
 </script>
-
 </body>
 </html>

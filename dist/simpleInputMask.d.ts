@@ -12,3 +12,4 @@ declare class SimpleInputMask {
     attach(input: HTMLInputElement): void;
     detach(): void;
 }
+export default SimpleInputMask;

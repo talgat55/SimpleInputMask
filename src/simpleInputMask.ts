@@ -95,3 +95,4 @@ class SimpleInputMask {
 }
 
 export default SimpleInputMask;
+

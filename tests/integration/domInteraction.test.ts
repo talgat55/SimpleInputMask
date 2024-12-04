@@ -1,4 +1,4 @@
-import { SimpleInputMask } from "../../src/simpleInputMask";
+import SimpleInputMask from "../../src/simpleInputMask";
 
 test("Input updates correctly with mask", () => {
 
