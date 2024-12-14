@@ -1,14 +1,11 @@
-type MaskConfig = {
-    mask: string;
-    onComplete?: (value: string) => void;
-};
+import {TMaskConfig} from "./types";
 
 class SimpleInputMask {
     private mask: string;
     private inputElement: HTMLInputElement | null = null;
     private onCompleteCallback?: (value: string) => void;
 
-    constructor(config: MaskConfig) {
+    constructor(config: TMaskConfig) {
         this.mask = config.mask;
         this.onCompleteCallback = config.onComplete;
     }
@@ -21,7 +18,14 @@ class SimpleInputMask {
             const maskChar = this.mask[i];
             const currentValueChar = value[valueIndex];
 
-            if (!currentValueChar) break;
+            if (!currentValueChar) {
+                if (maskChar === "9" || maskChar === "A" || maskChar === "*") {
+                    maskedValue += "_";
+                } else {
+                    maskedValue += maskChar;
+                }
+                continue;
+            }
 
             if (maskChar === "9") {
                 if (/\d/.test(currentValueChar)) {
@@ -59,11 +63,12 @@ class SimpleInputMask {
     }
 
     private isComplete(value: string): boolean {
-        return this.applyMask(value).length === this.mask.length;
+        return this.applyMask(value).indexOf("_") === -1;
     }
 
     attach(input: HTMLInputElement) {
         this.inputElement = input;
+        this.inputElement.placeholder = this.applyMask("");
 
         const onInput = () => {
             if (!this.inputElement) return;
@@ -95,4 +100,3 @@ class SimpleInputMask {
 }
 
 export default SimpleInputMask;
-

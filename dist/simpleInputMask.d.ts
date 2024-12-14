@@ -1,12 +1,9 @@
-type MaskConfig = {
-    mask: string;
-    onComplete?: (value: string) => void;
-};
+import { TMaskConfig } from "./types";
 declare class SimpleInputMask {
     private mask;
     private inputElement;
     private onCompleteCallback?;
-    constructor(config: MaskConfig);
+    constructor(config: TMaskConfig);
     private applyMask;
     private isComplete;
     attach(input: HTMLInputElement): void;

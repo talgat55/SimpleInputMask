@@ -6,12 +6,12 @@
 </head>
 <body>
 <h1>Phone</h1>
-<input id="phone" placeholder="(###) ###-####" />
+<input id="phone" />
 <script src="../dist/simpleInputMask.js"></script>
 <script>
     const input = document.getElementById("phone");
     const mask = new SimpleInputMask({
-        mask: "(###) ###-####",
+        mask: "(999) 999-9999",
     });
     mask.attach(input);
 </script>
