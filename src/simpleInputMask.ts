@@ -60,13 +60,12 @@ class SimpleInputMask {
         });
     }
 
-    private findNextPlaceholderPosition(value: string, cursorPosition: number): number {
-        for (let i = cursorPosition; i < this.mask.length; i++) {
-            if (this.mask[i] === "9" || this.mask[i] === "A" || this.mask[i] === "*") {
-                return i;
-            }
+
+    private findNextEditablePosition(value: string, position: number): number {
+        for (let i = position; i < value.length; i++) {
+            if (value[i] === "_") return i;
         }
-        return this.mask.length;
+        return value.length;
     }
 
     attach(input: HTMLInputElement) {
@@ -78,23 +77,13 @@ class SimpleInputMask {
 
             const rawValue = this.inputElement.value;
             const cursorPosition = this.inputElement.selectionStart || 0;
-            const oldValue = this.inputElement.dataset.oldValue || "";
-            const oldCursor = parseInt(this.inputElement.dataset.oldCursor || "0");
 
             const maskedValue = this.applyMask(rawValue);
+
+            const nextCursorPosition = this.findNextEditablePosition(maskedValue, cursorPosition);
+
             this.inputElement.value = maskedValue;
-
-            let nextCursorPosition = cursorPosition;
-
-            if (rawValue.length < oldValue.length) {
-                nextCursorPosition = cursorPosition; // При удалении оставляем позицию курсора
-            } else {
-                nextCursorPosition = this.findNextPlaceholderPosition(maskedValue, oldCursor);
-            }
-
             this.setCursorPosition(this.inputElement, nextCursorPosition);
-            this.inputElement.dataset.oldValue = maskedValue;
-            this.inputElement.dataset.oldCursor = nextCursorPosition.toString();
 
             if (this.isComplete(maskedValue) && this.onCompleteCallback) {
                 this.onCompleteCallback(maskedValue);
@@ -105,6 +94,8 @@ class SimpleInputMask {
         this.inputElement.addEventListener("paste", onInput);
         (this.inputElement as any)._onInputMask = onInput;
     }
+
+
 
     detach() {
         if (this.inputElement) {

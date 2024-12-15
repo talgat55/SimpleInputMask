@@ -33,7 +33,7 @@ module.exports = (env, argv) => {
                 directory: path.resolve(__dirname, "public"),
             },
             compress: true,
-            port: 3000,
+            port: 4000,
             open: true,
             hot: true,
         },
