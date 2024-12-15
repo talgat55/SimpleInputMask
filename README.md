@@ -69,21 +69,21 @@ const mask = new SimpleInputMask(inputElement, options);
 #### Phone Number
 ```javascript
 new SimpleInputMask(document.getElementById('phone'), {
-  mask: '(###) ###-####'
+  mask: '(999) 999-9999'
 });
 ```
 
 #### Date
 ```javascript
 new SimpleInputMask(document.getElementById('date'), {
-  mask: '##/##/####'
+  mask: '99/99/9999'
 });
 ```
 
 #### Credit Card
 ```javascript
 new SimpleInputMask(document.getElementById('credit-card'), {
-  mask: '#### #### #### ####'
+  mask: '9999 9999 9999 9999'
 });
 ```
 
