@@ -2,6 +2,6 @@
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'jsdom',
-    rootDir: 'tests', 
+    rootDir: 'tests',
     moduleFileExtensions: ['ts', 'js'],
 };

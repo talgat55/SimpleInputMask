@@ -13,7 +13,7 @@ module.exports = (env, argv) => {
             library: "SimpleInputMask",
             libraryExport: "default",
             libraryTarget: "window",
-            clean: true, // Очищает dist перед сборкой
+            clean: true,
         },
         resolve: {
             extensions: [".ts", ".js"],
@@ -30,7 +30,7 @@ module.exports = (env, argv) => {
         devtool: isDev ? "inline-source-map" : false,
         devServer: {
             static: {
-                directory: path.resolve(__dirname, "public"), // Указываем папку для статики
+                directory: path.resolve(__dirname, "public"),
             },
             compress: true,
             port: 3000,
@@ -39,7 +39,7 @@ module.exports = (env, argv) => {
         },
         plugins: [
             new HtmlWebpackPlugin({
-                template: path.resolve(__dirname, "public", "index.html"), // Шаблон из public
+                template: path.resolve(__dirname, "public", "index.html"),
             }),
         ],
     };
