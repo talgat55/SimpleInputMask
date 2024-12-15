@@ -6,6 +6,8 @@ declare class SimpleInputMask {
     constructor(config: TMaskConfig);
     private applyMask;
     private isComplete;
+    private setCursorPosition;
+    private findNextPlaceholderPosition;
     attach(input: HTMLInputElement): void;
     detach(): void;
 }

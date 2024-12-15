@@ -1,4 +1,4 @@
-import {TMaskConfig} from "./types";
+import { TMaskConfig } from "./types";
 
 class SimpleInputMask {
     private mask: string;
@@ -27,35 +27,23 @@ class SimpleInputMask {
                 continue;
             }
 
-            if (maskChar === "9") {
-                if (/\d/.test(currentValueChar)) {
-                    maskedValue += currentValueChar;
-                    valueIndex++;
-                } else {
-                    valueIndex++;
-                    i--;
-                }
-            } else if (maskChar === "A") {
-                if (/[a-zA-Z]/.test(currentValueChar)) {
-                    maskedValue += currentValueChar;
-                    valueIndex++;
-                } else {
-                    valueIndex++;
-                    i--;
-                }
-            } else if (maskChar === "*") {
-                if (/[a-zA-Z0-9]/.test(currentValueChar)) {
-                    maskedValue += currentValueChar;
-                    valueIndex++;
-                } else {
-                    valueIndex++;
-                    i--;
-                }
-            } else {
+            if (maskChar === "9" && /\d/.test(currentValueChar)) {
+                maskedValue += currentValueChar;
+                valueIndex++;
+            } else if (maskChar === "A" && /[a-zA-Z]/.test(currentValueChar)) {
+                maskedValue += currentValueChar;
+                valueIndex++;
+            } else if (maskChar === "*" && /[a-zA-Z0-9]/.test(currentValueChar)) {
+                maskedValue += currentValueChar;
+                valueIndex++;
+            } else if (maskChar !== "9" && maskChar !== "A" && maskChar !== "*") {
                 maskedValue += maskChar;
                 if (currentValueChar === maskChar) {
                     valueIndex++;
                 }
+            } else {
+                valueIndex++;
+                i--;
             }
         }
 
@@ -66,17 +54,49 @@ class SimpleInputMask {
         return this.applyMask(value).indexOf("_") === -1;
     }
 
+    private setCursorPosition(input: HTMLInputElement, position: number) {
+        requestAnimationFrame(() => {
+            input.setSelectionRange(position, position);
+        });
+    }
+
+    private findNextPlaceholderPosition(value: string, cursorPosition: number): number {
+        for (let i = cursorPosition; i < this.mask.length; i++) {
+            if (this.mask[i] === "9" || this.mask[i] === "A" || this.mask[i] === "*") {
+                return i;
+            }
+        }
+        return this.mask.length;
+    }
+
     attach(input: HTMLInputElement) {
         this.inputElement = input;
         this.inputElement.placeholder = this.applyMask("");
 
         const onInput = () => {
             if (!this.inputElement) return;
+
             const rawValue = this.inputElement.value;
+            const cursorPosition = this.inputElement.selectionStart || 0;
+            const oldValue = this.inputElement.dataset.oldValue || "";
+            const oldCursor = parseInt(this.inputElement.dataset.oldCursor || "0");
+
             const maskedValue = this.applyMask(rawValue);
             this.inputElement.value = maskedValue;
 
-            if (this.isComplete(rawValue) && this.onCompleteCallback) {
+            let nextCursorPosition = cursorPosition;
+
+            if (rawValue.length < oldValue.length) {
+                nextCursorPosition = cursorPosition; // При удалении оставляем позицию курсора
+            } else {
+                nextCursorPosition = this.findNextPlaceholderPosition(maskedValue, oldCursor);
+            }
+
+            this.setCursorPosition(this.inputElement, nextCursorPosition);
+            this.inputElement.dataset.oldValue = maskedValue;
+            this.inputElement.dataset.oldCursor = nextCursorPosition.toString();
+
+            if (this.isComplete(maskedValue) && this.onCompleteCallback) {
                 this.onCompleteCallback(maskedValue);
             }
         };
