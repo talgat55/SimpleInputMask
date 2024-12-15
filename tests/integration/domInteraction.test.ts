@@ -4,7 +4,7 @@ test("Input updates correctly with mask", () => {
 
     const input = document.createElement("input");
 
-    const mask = new SimpleInputMask({ mask: "(###) ###-####" });
+    const mask = new SimpleInputMask({ mask: "(999) 999-9999" });
 
     mask.attach(input);
 
