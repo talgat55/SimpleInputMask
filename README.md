@@ -57,9 +57,8 @@ const mask = new SimpleInputMask(inputElement, options);
 | Method              | Description                              |
 |---------------------|------------------------------------------|
 | `destroy()`         | Removes the mask from the input element. |
+| `updateMask(mask)`  | Dynamically updates the input mask.      |
 
-
-<!---| `updateMask(mask)`  | Dynamically updates the input mask.      | -->
 
 
 
@@ -86,7 +85,15 @@ new SimpleInputMask(document.getElementById('credit-card'), {
   mask: '9999 9999 9999 9999'
 });
 ```
+#### Updating the Mask Dynamically
+```javascript
+const input = document.getElementById('dynamic-input');
+const mask = new SimpleInputMask(input, { mask: '(999) 999-9999' });
 
+setTimeout(() => {
+  mask.updateMask('999-99-9999'); 
+}, 5000);
+```
 ## License
 
 SimpleInputMask is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
