@@ -35,7 +35,7 @@ Here's a quick example to get you started:
 import SimpleInputMask from 'simple-input-mask';
 
 const input = document.getElementById('phone');
-const mask = new SimpleInputMask(input, { mask: '(###) ###-####' });
+const mask = new SimpleInputMask(input, { mask: '(999) 999-9999' });
 ```
 
 ## API
@@ -47,9 +47,9 @@ const mask = new SimpleInputMask(inputElement, options);
 
 ### Options
 
-| Option       | Type     | Default | Description                                      |
-|--------------|----------|---------|--------------------------------------------------|
-| `mask`       | `string` | `null`  | The mask pattern (e.g., `(###) ###-####`).       |
+| Option       | Type     | Default | Description                                     |
+|--------------|----------|---------|-------------------------------------------------|
+| `mask`       | `string` | `null`  | The mask pattern (e.g., `(999) 999-9999`).      |
 | `onComplete` | `function` | `null`| Callback triggered when input matches the mask. |
 
 ### Methods
