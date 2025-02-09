@@ -7,8 +7,9 @@ declare class SimpleInputMask {
     private applyMask;
     private isComplete;
     private setCursorPosition;
-    private findNextPlaceholderPosition;
+    private findNextEditablePosition;
     attach(input: HTMLInputElement): void;
+    updateMask(newMask: string): void;
     detach(): void;
 }
 export default SimpleInputMask;

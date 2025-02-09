@@ -95,7 +95,12 @@ class SimpleInputMask {
         (this.inputElement as any)._onInputMask = onInput;
     }
 
-
+    updateMask(newMask: string) {
+        this.mask = newMask;
+        if (this.inputElement) {
+            this.inputElement.value = this.applyMask(this.inputElement.value);
+        }
+    }
 
     detach() {
         if (this.inputElement) {

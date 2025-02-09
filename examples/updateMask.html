@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update mask</title>
+</head>
+<body>
+<script src="../dist/simpleInputMask.js"></script>
+<label for="phone">Phone Number:</label>
+<input id="phone" type="text" placeholder="Enter your phone number">
+
+<label for="format">Choose Format:</label>
+<select id="format">
+    <option value="(999) 999-9999">US Format</option>
+    <option value="+99 999 999 9999">International</option>
+</select>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const input = document.getElementById("phone");
+        const formatSelector = document.getElementById("format");
+
+        const mask = new SimpleInputMask({
+            mask: "(999) 999-9999"
+        });
+        mask.attach(input);
+
+        formatSelector.addEventListener("change", () => {
+            const selectedMask = formatSelector.value;
+            mask.updateMask(selectedMask);
+        });
+    });
+</script>
+</body>
+</html>
