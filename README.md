@@ -47,17 +47,20 @@ const mask = new SimpleInputMask(inputElement, options);
 
 ### Options
 
-| Option       | Type     | Default | Description                                     |
-|--------------|----------|---------|-------------------------------------------------|
-| `mask`       | `string` | `null`  | The mask pattern (e.g., `(999) 999-9999`).      |
-| `onComplete` | `function` | `null`| Callback triggered when input matches the mask. |
+| Option            | Type       | Default | Description                                                          |
+|-------------------|------------|---------|----------------------------------------------------------------------|
+| `mask`            | `string`   | —       | The mask pattern (e.g., `(999) 999-9999`).                           |
+| `placeholderChar` | `string`   | `'_'`   | Character for unfilled positions in the mask (e.g. `' '`, `'.'`).    |
+| `onComplete`      | `function` | `null`  | Callback triggered when input matches the mask.                      |
 
 ### Methods
 
-| Method              | Description                              |
-|---------------------|------------------------------------------|
-| `destroy()`         | Removes the mask from the input element. |
-| `updateMask(mask)`  | Dynamically updates the input mask.      |
+| Method                    | Description                                                                 |
+|---------------------------|-----------------------------------------------------------------------------|
+| `attach(input)`           | Attaches the mask to an input element.                                      |
+| `detach()`                | Removes the mask from the input element.                                    |
+| `getUnmaskedValue(value?)`| Returns only entered characters without mask literals (e.g. for form submit).|
+| `updateMask(mask)`        | Dynamically updates the input mask.                                         |
 
 
 
@@ -88,12 +91,29 @@ new SimpleInputMask(document.getElementById('credit-card'), {
 #### Updating the Mask Dynamically
 ```javascript
 const input = document.getElementById('dynamic-input');
-const mask = new SimpleInputMask(input, { mask: '(999) 999-9999' });
+const mask = new SimpleInputMask({ mask: '(999) 999-9999' });
+mask.attach(input);
 
 setTimeout(() => {
   mask.updateMask('999-99-9999'); 
 }, 5000);
 ```
+
+#### Custom placeholder and raw value
+```javascript
+const mask = new SimpleInputMask({
+  mask: '(999) 999-9999',
+  placeholderChar: ' '
+});
+mask.attach(document.getElementById('phone'));
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const raw = mask.getUnmaskedValue();
+  sendToServer({ phone: raw });
+});
+```
+
 ## License
 
 SimpleInputMask is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

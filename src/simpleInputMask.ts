@@ -2,11 +2,13 @@ import { TMaskConfig } from "./types";
 
 class SimpleInputMask {
     private mask: string;
+    private placeholderChar: string;
     private inputElement: HTMLInputElement | null = null;
     private onCompleteCallback?: (value: string) => void;
 
     constructor(config: TMaskConfig) {
         this.mask = config.mask;
+        this.placeholderChar = config.placeholderChar ?? "_";
         this.onCompleteCallback = config.onComplete;
     }
 
@@ -20,7 +22,7 @@ class SimpleInputMask {
 
             if (!currentValueChar) {
                 if (maskChar === "9" || maskChar === "A" || maskChar === "*") {
-                    maskedValue += "_";
+                    maskedValue += this.placeholderChar;
                 } else {
                     maskedValue += maskChar;
                 }
@@ -51,7 +53,7 @@ class SimpleInputMask {
     }
 
     private isComplete(value: string): boolean {
-        return this.applyMask(value).indexOf("_") === -1;
+        return this.applyMask(value).indexOf(this.placeholderChar) === -1;
     }
 
     private setCursorPosition(input: HTMLInputElement, position: number) {
@@ -63,7 +65,7 @@ class SimpleInputMask {
 
     private findNextEditablePosition(value: string, position: number): number {
         for (let i = position; i < value.length; i++) {
-            if (value[i] === "_") return i;
+            if (value[i] === this.placeholderChar) return i;
         }
         return value.length;
     }
@@ -93,6 +95,23 @@ class SimpleInputMask {
         this.inputElement.addEventListener("input", onInput);
         this.inputElement.addEventListener("paste", onInput);
         (this.inputElement as any)._onInputMask = onInput;
+    }
+
+    getUnmaskedValue(value?: string): string {
+        const str = value ?? this.inputElement?.value ?? "";
+        let result = "";
+        let valueIndex = 0;
+        for (let i = 0; i < this.mask.length && valueIndex < str.length; i++) {
+            const maskChar = this.mask[i];
+            const valueChar = str[valueIndex];
+            valueIndex++;
+            if (maskChar === "9" || maskChar === "A" || maskChar === "*") {
+                if (valueChar !== this.placeholderChar) {
+                    result += valueChar;
+                }
+            }
+        }
+        return result;
     }
 
     updateMask(newMask: string) {
