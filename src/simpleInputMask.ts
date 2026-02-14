@@ -5,11 +5,13 @@ class SimpleInputMask {
     private placeholderChar: string;
     private inputElement: HTMLInputElement | null = null;
     private onCompleteCallback?: (value: string) => void;
+    private onChangeCallback?: (maskedValue: string, unmaskedValue: string) => void;
 
     constructor(config: TMaskConfig) {
         this.mask = config.mask;
         this.placeholderChar = config.placeholderChar ?? "_";
         this.onCompleteCallback = config.onComplete;
+        this.onChangeCallback = config.onChange;
     }
 
     private applyMask(value: string): string {
@@ -74,6 +76,13 @@ class SimpleInputMask {
         this.inputElement = input;
         this.inputElement.placeholder = this.applyMask("");
 
+        if (this.inputElement.value) {
+            const masked = this.applyMask(this.inputElement.value);
+            this.inputElement.value = masked;
+            const pos = this.findNextEditablePosition(masked, masked.length);
+            this.setCursorPosition(this.inputElement, pos);
+        }
+
         const onInput = () => {
             if (!this.inputElement) return;
 
@@ -87,6 +96,9 @@ class SimpleInputMask {
             this.inputElement.value = maskedValue;
             this.setCursorPosition(this.inputElement, nextCursorPosition);
 
+            if (this.onChangeCallback) {
+                this.onChangeCallback(maskedValue, this.getUnmaskedValue(maskedValue));
+            }
             if (this.isComplete(maskedValue) && this.onCompleteCallback) {
                 this.onCompleteCallback(maskedValue);
             }
@@ -131,6 +143,10 @@ class SimpleInputMask {
             }
             this.inputElement = null;
         }
+    }
+
+    destroy() {
+        this.detach();
     }
 }
 

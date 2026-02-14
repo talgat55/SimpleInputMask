@@ -47,18 +47,20 @@ const mask = new SimpleInputMask(inputElement, options);
 
 ### Options
 
-| Option            | Type       | Default | Description                                                          |
-|-------------------|------------|---------|----------------------------------------------------------------------|
-| `mask`            | `string`   | —       | The mask pattern (e.g., `(999) 999-9999`).                           |
-| `placeholderChar` | `string`   | `'_'`   | Character for unfilled positions in the mask (e.g. `' '`, `'.'`).    |
-| `onComplete`      | `function` | `null`  | Callback triggered when input matches the mask.                      |
+| Option            | Type       | Default | Description                                                                 |
+|-------------------|------------|---------|-----------------------------------------------------------------------------|
+| `mask`            | `string`   | —       | The mask pattern (e.g., `(999) 999-9999`).                                  |
+| `placeholderChar` | `string`   | `'_'`   | Character for unfilled positions in the mask (e.g. `' '`, `'.'`).           |
+| `onComplete`      | `function` | `null`  | Callback triggered when input matches the mask.                             |
+| `onChange`        | `function` | `null`  | Callback on every change: `(maskedValue, unmaskedValue) => void`.           |
 
 ### Methods
 
 | Method                    | Description                                                                 |
 |---------------------------|-----------------------------------------------------------------------------|
-| `attach(input)`           | Attaches the mask to an input element.                                      |
+| `attach(input)`           | Attaches the mask to an input element. Applies mask to existing value.      |
 | `detach()`                | Removes the mask from the input element.                                    |
+| `destroy()`               | Alias for `detach()`.                                                       |
 | `getUnmaskedValue(value?)`| Returns only entered characters without mask literals (e.g. for form submit).|
 | `updateMask(mask)`        | Dynamically updates the input mask.                                         |
 
