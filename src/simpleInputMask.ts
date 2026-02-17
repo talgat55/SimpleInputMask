@@ -54,8 +54,13 @@ class SimpleInputMask {
         return maskedValue;
     }
 
-    private isComplete(value: string): boolean {
+    private checkComplete(value: string): boolean {
         return this.applyMask(value).indexOf(this.placeholderChar) === -1;
+    }
+
+    isComplete(): boolean {
+        if (!this.inputElement) return false;
+        return this.checkComplete(this.inputElement.value);
     }
 
     private setCursorPosition(input: HTMLInputElement, position: number) {
@@ -99,7 +104,7 @@ class SimpleInputMask {
             if (this.onChangeCallback) {
                 this.onChangeCallback(maskedValue, this.getUnmaskedValue(maskedValue));
             }
-            if (this.isComplete(maskedValue) && this.onCompleteCallback) {
+            if (this.checkComplete(maskedValue) && this.onCompleteCallback) {
                 this.onCompleteCallback(maskedValue);
             }
         };
@@ -124,6 +129,29 @@ class SimpleInputMask {
             }
         }
         return result;
+    }
+
+    setValue(value: string) {
+        if (!this.inputElement) return;
+        const maskedValue = this.applyMask(value);
+        this.inputElement.value = maskedValue;
+        const nextCursorPosition = this.findNextEditablePosition(maskedValue, 0);
+        this.setCursorPosition(this.inputElement, nextCursorPosition);
+        if (this.onChangeCallback) {
+            this.onChangeCallback(maskedValue, this.getUnmaskedValue(maskedValue));
+        }
+        if (this.checkComplete(maskedValue) && this.onCompleteCallback) {
+            this.onCompleteCallback(maskedValue);
+        }
+    }
+
+    clear() {
+        if (!this.inputElement) return;
+        this.inputElement.value = "";
+        this.setCursorPosition(this.inputElement, 0);
+        if (this.onChangeCallback) {
+            this.onChangeCallback("", "");
+        }
     }
 
     updateMask(newMask: string) {

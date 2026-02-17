@@ -59,9 +59,12 @@ const mask = new SimpleInputMask(inputElement, options);
 | Method                    | Description                                                                 |
 |---------------------------|-----------------------------------------------------------------------------|
 | `attach(input)`           | Attaches the mask to an input element. Applies mask to existing value.      |
+| `clear()`                 | Clears the input field and resets cursor position.                           |
 | `detach()`                | Removes the mask from the input element.                                    |
 | `destroy()`               | Alias for `detach()`.                                                       |
 | `getUnmaskedValue(value?)`| Returns only entered characters without mask literals (e.g. for form submit).|
+| `isComplete()`            | Returns `true` if the mask is completely filled.                            |
+| `setValue(value)`         | Programmatically sets the input value with mask applied.                   |
 | `updateMask(mask)`        | Dynamically updates the input mask.                                         |
 
 
