@@ -51,8 +51,10 @@ const mask = new SimpleInputMask(inputElement, options);
 |-------------------|------------|---------|-----------------------------------------------------------------------------|
 | `mask`            | `string`   | —       | The mask pattern (e.g., `(999) 999-9999`).                                  |
 | `placeholderChar` | `string`   | `'_'`   | Character for unfilled positions in the mask (e.g. `' '`, `'.'`).           |
+| `showMaskOnFocus` | `boolean`  | `false` | Show mask placeholder only when input is focused.                           |
 | `onComplete`      | `function` | `null`  | Callback triggered when input matches the mask.                             |
 | `onChange`        | `function` | `null`  | Callback on every change: `(maskedValue, unmaskedValue) => void`.           |
+| `onIncomplete`    | `function` | `null`  | Callback when mask becomes incomplete after being complete.                 |
 
 ### Methods
 
@@ -62,6 +64,9 @@ const mask = new SimpleInputMask(inputElement, options);
 | `clear()`                 | Clears the input field and resets cursor position.                           |
 | `detach()`                | Removes the mask from the input element.                                    |
 | `destroy()`               | Alias for `detach()`.                                                       |
+| `getCursorPosition()`     | Returns current cursor position in the input.                               |
+| `getMaskedValue()`         | Returns current masked value.                                               |
+| `getState()`               | Returns object with current state: `{maskedValue, unmaskedValue, isComplete, cursorPosition}`.|
 | `getUnmaskedValue(value?)`| Returns only entered characters without mask literals (e.g. for form submit).|
 | `isComplete()`            | Returns `true` if the mask is completely filled.                            |
 | `setValue(value)`         | Programmatically sets the input value with mask applied.                   |
@@ -117,6 +122,28 @@ form.addEventListener('submit', (e) => {
   const raw = mask.getUnmaskedValue();
   sendToServer({ phone: raw });
 });
+```
+
+#### Show mask on focus only
+```javascript
+const mask = new SimpleInputMask({
+  mask: '(999) 999-9999',
+  showMaskOnFocus: true
+});
+mask.attach(document.getElementById('phone'));
+```
+
+#### Get state and handle incomplete
+```javascript
+const mask = new SimpleInputMask({
+  mask: '(999) 999-9999',
+  onComplete: (value) => console.log('Complete:', value),
+  onIncomplete: (masked, unmasked) => console.log('Incomplete:', unmasked)
+});
+mask.attach(document.getElementById('phone'));
+
+const state = mask.getState();
+console.log(state.isComplete, state.cursorPosition);
 ```
 
 ## License
